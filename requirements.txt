@@ -1,22 +1,22 @@
 brotlipy==0.7.0
 certifi==2020.12.5
-cffi @ file:///C:/ci/cffi_1606237165371/work
-chardet @ file:///C:/ci/chardet_1607706937985/work
+cffi
+chardet
 click==7.1.2
-cryptography @ file:///C:/ci/cryptography_1607618721363/work
+cryptography
 Flask==1.1.2
 Flask-WTF==0.14.3
-idna @ file:///tmp/build/80754af9/idna_1593446292537/work
+idna
 itsdangerous==1.1.0
 Jinja2==2.11.2
-MarkupSafe @ file:///C:/ci/markupsafe_1607027406824/work
-pycparser @ file:///tmp/build/80754af9/pycparser_1594388511720/work
-pyOpenSSL @ file:///tmp/build/80754af9/pyopenssl_1608057966937/work
-PySocks @ file:///C:/ci/pysocks_1605307512533/work
-requests @ file:///tmp/build/80754af9/requests_1608241421344/work
-six @ file:///C:/ci/six_1605205404068/work
-urllib3 @ file:///tmp/build/80754af9/urllib3_1606938623459/work
+MarkupSafe
+pycparser
+pyOpenSSL
+PySocks
+requests
+six
+urllib3
 Werkzeug==1.0.1
-win-inet-pton @ file:///C:/ci/win_inet_pton_1605306162074/work
+win-inet-pton
 wincertstore==0.2
 WTForms==2.3.3
