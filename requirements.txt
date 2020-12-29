@@ -3,7 +3,7 @@ certifi==2020.12.5
 cffi
 chardet
 click==7.1.2
-cryptographyk
+cryptography
 Flask==1.1.2
 Flask-WTF==0.14.3
 idna
