@@ -12,7 +12,8 @@ Jinja2==2.11.2
 joblib==1.0.0
 MarkupSafe
 mkl-fft==1.0.6
-mkl-service==2.3.0
+mkl-random
+mkl-service
 numpy
 pandas
 pycparser
