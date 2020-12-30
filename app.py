@@ -6,6 +6,7 @@ from flask import Flask, request, jsonify
 import json
 import pickle
 import joblib
+import os
 
 subject_id = 1.
 
@@ -44,7 +45,4 @@ def predict():
 
 
 if __name__ == '__main__':
-    try:
-        app.run(port=5000, host='0.0.0.0', debug=True)
-    except:
-        print("Server is exited unexpectedly. Please contact server admin.")
+    app.run(host='0.0.0.0', debug=True, port=int(os.environ.get("PORT", 8080)))
