@@ -2,6 +2,7 @@
 import requests
 import pandas as pd
 import numpy as np
+import datetime
 from flask import Flask, request, jsonify
 import json
 import pickle
@@ -19,14 +20,14 @@ def _load_test_data():
     :return:
     """
     df = pickle.load(
-        open("test_data_sub" + str(subject_id) + ".p", "rb"))
+        open("data" + os.sep + "test_data_sub" + str(subject_id) + ".p", "rb"))
     return df[np.random.choice(len(df), 1)[0], :].tolist()
 
 
 app = Flask(__name__)
 
 # Load the model
-model = joblib.load('model_sub' + str(subject_id) + '.pkl')
+model = joblib.load('models' + os.sep + 'model_sub' + str(subject_id) + '.pkl')
 
 
 @app.route('/api', methods=['GET'])
@@ -41,7 +42,9 @@ def predict():
     # Take the first value of prediction
     output = prediction[0]
 
-    return json.dumps({"success": True, "data": output})
+    now = datetime.datetime.now()
+
+    return json.dumps({"success": True, "data": output, "Current date and time": now.strftime("%Y-%m-%d %H:%M:%S")})
 
 
 if __name__ == '__main__':
