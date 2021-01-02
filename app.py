@@ -10,6 +10,7 @@ import joblib
 import os
 
 subject_id = 1.
+display_dict = {}
 
 app = Flask(__name__)
 
@@ -19,9 +20,12 @@ def _load_test_data():
 
     :return:
     """
-    df = pickle.load(
-        open("data" + os.sep + "test_data_sub" + str(subject_id) + ".p", "rb"))
-    return df[np.random.choice(len(df), 1)[0], :].tolist()
+    df = pickle.load(open("data" + os.sep + "test_data_sub" + str(subject_id) + ".p", "rb"))
+    _idx = np.random.choice(len(df), 1)[0]
+    display_dict['Heart Rate'] = df[_idx, 6]
+    display_dict['pNN25'] = df[_idx, 7]
+    display_dict['pNN50'] = df[_idx, 8]
+    return df[_idx, :].tolist()
 
 
 app = Flask(__name__)
@@ -44,7 +48,8 @@ def predict():
 
     now = datetime.datetime.now()
 
-    return json.dumps({"success": True, "data": output, "Current date and time": now.strftime("%Y-%m-%d %H:%M:%S")})
+    display_dict.update({"success": True, "data": output, "Current date and time": now.strftime("%Y-%m-%d %H:%M:%S")})
+    return json.dumps(display_dict)
 
 
 if __name__ == '__main__':
