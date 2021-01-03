@@ -59,7 +59,6 @@ def insertOne():
     query = StressData.insert_one(queryObject)
     return json.dumps({"success": True}), 200
 
-
 # To find the first document that matches a defined query,
 # find_one function is used and the query to match is passed
 # as an argument.
@@ -68,6 +67,12 @@ def findOne(argument, value):
     queryObject = {argument: value}
     query = StressData.find_one(queryObject)
     query.pop('_id')
+    return jsonify(query)
+
+@app.route('/delete-one/<argument>/<value>', methods=['GET'])
+def deleteOne(argument, value):
+    queryObject = {argument: value}
+    query = StressData.delete_one(queryObject)
     return jsonify(query)
 
 @app.route('/dummy', methods=['GET'])
@@ -137,7 +142,6 @@ def predict():
     #  1. Call update first for http://0.0.0.0:8080/update/timestamp/../condition/..
     #  2. Call update first for http://0.0.0.0:8080/update/timestamp/../user_labelled/True/
     # TODO: Call findall() for displaying unlabelled data to the client
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=int(os.environ.get("PORT", 8080)))
