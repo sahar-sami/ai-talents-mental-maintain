@@ -53,7 +53,7 @@ def insertOne():
     queryObject = {
         'timestamp': timestamp,
         'data': data,
-        'condition': condition,
+        'is_stress': condition,
         'user_labelled': False,
     }
     query = StressData.insert_one(queryObject)
@@ -69,11 +69,11 @@ def findOne(argument, value):
     query.pop('_id')
     return jsonify(query)
 
-@app.route('/delete-one/<argument>/<value>', methods=['GET'])
+@app.route('/delete-one/<argument>/<value>', methods=['DELETE'])
 def deleteOne(argument, value):
     queryObject = {argument: value}
     query = StressData.delete_one(queryObject)
-    return jsonify(query)
+    return "deleted"
 
 @app.route('/dummy', methods=['GET'])
 def dummy():
@@ -93,21 +93,46 @@ def findAll():
     for x in query:
         if not x['user_labelled']:
             output.append(x)
-            output[i].pop('_id')
+            output[i].pop("_id")
             i += 1
     return jsonify(output)
+
+
+@app.route('/stresscounts', methods=['GET'])
+def stress_counts():
+    morning = 0
+    afternoon = 0
+    evening = 0
+    late_night = 0
+    query = StressData.find()
+    output = []
+    for x in query:
+        if x["is_stress"]:
+            print(x["timestamp"][:2])
+            hour = int(x["timestamp"][:2]) #using 24 hour clock system
+            if hour >= 5 and hour < 12:
+                morning += 1
+            elif hour >= 12 and hour < 18:
+                afternoon += 1
+            elif hour >= 18 and hour < 24: 
+                evening += 1
+            else:
+                late_night += 1
+    output = {"morning": morning, "afternoon": afternoon, "evening": evening, "late_night": late_night}
+    return jsonify(output)
+
 
 
 # To update a document in a collection, update_one()
 # function is used. The queryObject to find the document is passed as
 # the first argument, the corresponding updateObject is passed as the
 # second argument under the '$set' index.
-@app.route('/update', methods=['POST'])
+@app.route('/update/<argument>/<value>', methods=['POST'])
 # key: 'timestamp'; element: 'condition'; updateValue: 'stress' or 'baseline' entered by user
-def update():
+def update(argument, value):
     body = json.loads(request.data)
-    key = body["key"]
-    value = body["value"]
+    app.logger.info(body)
+    key = argument
     element = body["element"]
     updateValue = body["updateValue"]
     queryObject = {key: value}
@@ -130,10 +155,10 @@ def predict():
 
     # Take the first value of prediction
     output = prediction[0]
-
+    is_stress = True if output == "stress" else False
     now = datetime.datetime.now()
 
-    display_dict.update({"label": output,
+    display_dict.update({"is_stress": is_stress,
                          "timestamp": now.strftime("%Y-%m-%d %H:%M:%S")})
     return json.dumps(display_dict), 200
 
