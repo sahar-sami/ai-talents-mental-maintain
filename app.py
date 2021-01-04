@@ -105,11 +105,18 @@ def stress_counts():
     evening = 0
     late_night = 0
     query = StressData.find()
-    output = []
+    hr_sum = 0
+    pnn_25 = 0
+    pnn_50 = 0
+    output = {}
+    total = 0
     for x in query:
         if x["is_stress"]:
-            print(x["timestamp"][:2])
-            hour = int(x["timestamp"][:2]) #using 24 hour clock system
+            total += 1
+            hr_sum += x["data"]["heart_rate"]
+            pnn_25 += x["data"]["pNN25"]
+            pnn_50 += x["data"]["pNN50"]
+            hour = int(x["timestamp"][11:13]) #using 24 hour clock system
             if hour >= 5 and hour < 12:
                 morning += 1
             elif hour >= 12 and hour < 18:
@@ -118,7 +125,13 @@ def stress_counts():
                 evening += 1
             else:
                 late_night += 1
-    output = {"morning": morning, "afternoon": afternoon, "evening": evening, "late_night": late_night}
+    avg_hr = hr_sum / total
+    avg_25 = pnn_25 / total
+    avg_50 = pnn_50 / total
+    output = {"morning": morning, "afternoon": afternoon, "evening": evening,
+     "late_night": late_night, "HRavg": avg_hr, "pNN25avg": avg_25, "pNN50avg": avg_50}
+    m = max(["morning", "afternoon", "evening", "late_night"], key=lambda x: output[x])
+    output["max"] = m.replace("_", " ")
     return jsonify(output)
 
 
