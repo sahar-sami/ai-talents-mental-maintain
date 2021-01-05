@@ -31,7 +31,7 @@ def _load_test_data():
 model = joblib.load('models' + os.sep + 'model_sub' + str(subject_id) + '.pkl')
 
 # Replace your URL here. Don't forget to replace the password.
-connection_url = 'mongodb+srv://MentalMAIntain:ayon@mentalmaintain.toc5g.mongodb.net/MentalMAIntain?retryWrites=true&w=majority'
+connection_url = '' # enter database id
 app = Flask(__name__)
 CORS(app)
 client = pymongo.MongoClient(connection_url)
